@@ -20,6 +20,7 @@ class Command {
 
     this.controller = new Controller()
     this.robot = new Robot({ pollInterval })
+    this.robot.on('distance', this.controller.sendDistance)
   }
 
   run() {
