@@ -2,29 +2,27 @@
 
 /* eslint-disable no-console */
 
-require('readline').emitKeypressEvents(process.stdin)
+const OctoDash = require('octodash')
 const Controller = require('./lib/Controller')
 const Robot = require('./lib/Robot')
 
+const cliOptions = [{
+  names: ['poll-interval', 'p'],
+  type: 'integer',
+  env: 'INTERVAL',
+  help: 'Interval at which to poll the rangefinder (in ms). Use DEBUG=t2:Robot|t2:RangeFinder to see output',
+  default: 1000,
+}]
+
 class Command {
-  constructor() {
-    process.stdin.setRawMode(true)
+  constructor({ argv }) {
+    const { pollInterval } = new OctoDash({ argv, cliOptions }).parseOptions()
+
     this.controller = new Controller()
-    this.robot = new Robot()
+    this.robot = new Robot({ pollInterval })
   }
 
   run() {
-    console.log(`press "escape" to quit (PID: ${process.pid})`) // eslint-disable-line no-console
-
-    process.stdin.on('keypress', (ignored, { name }) => {
-      if (name === 'up') this.robot.forward()
-      if (name === 'left') this.robot.left()
-      if (name === 'right') this.robot.right()
-      if (name === 'down') this.robot.stop()
-
-      if (name === 'escape') this.exit()
-    })
-
     this.controller.connect((error) => {
       if (error) return console.error(`Error connecting to controller: ${error.message}`)
       console.log('Connected to controller')
@@ -39,4 +37,4 @@ class Command {
   }
 }
 
-new Command().run()
+new Command({ argv: process.argv }).run()
