@@ -9,13 +9,13 @@ const Robot = require('./lib/Robot')
 const cliOptions = [{
   names: ['accelerometer-poll-interval', 'a'],
   type: 'integer',
-  env: 'INTERVAL',
+  env: 'ACCELEROMETER_POLL_INTERVAL',
   help: 'Interval at which to poll the accelerometer (in ms). Use DEBUG=t2:Robot to see output',
   default: 1000,
 }, {
   names: ['range-finder-poll-interval', 'r'],
   type: 'integer',
-  env: 'INTERVAL',
+  env: 'RANGE_FINDER_POLL_INTERVAL',
   help: 'Interval at which to poll the rangefinder (in ms). Use DEBUG=t2:Robot|t2:RangeFinder to see output',
   default: 1000,
 }]
