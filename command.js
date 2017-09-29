@@ -21,6 +21,7 @@ class Command {
     this.controller = new Controller()
     this.robot = new Robot({ pollInterval })
     this.robot.on('distance', this.controller.sendDistance)
+    this.robot.on('accelerometer', this.controller.sendAccelerometer)
   }
 
   run() {
