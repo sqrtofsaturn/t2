@@ -7,7 +7,13 @@ const Controller = require('./lib/Controller')
 const Robot = require('./lib/Robot')
 
 const cliOptions = [{
-  names: ['poll-interval', 'p'],
+  names: ['accelerometer-poll-interval', 'a'],
+  type: 'integer',
+  env: 'INTERVAL',
+  help: 'Interval at which to poll the accelerometer (in ms). Use DEBUG=t2:Robot to see output',
+  default: 1000,
+}, {
+  names: ['range-finder-poll-interval', 'r'],
   type: 'integer',
   env: 'INTERVAL',
   help: 'Interval at which to poll the rangefinder (in ms). Use DEBUG=t2:Robot|t2:RangeFinder to see output',
@@ -16,10 +22,10 @@ const cliOptions = [{
 
 class Command {
   constructor({ argv }) {
-    const { pollInterval } = new OctoDash({ argv, cliOptions }).parseOptions()
+    const { accelerometerPollInterval, rangeFinderPollInterval } = new OctoDash({ argv, cliOptions }).parseOptions()
 
     this.controller = new Controller()
-    this.robot = new Robot({ pollInterval })
+    this.robot = new Robot({ accelerometerPollInterval, rangeFinderPollInterval })
     this.robot.on('distance', this.controller.sendDistance)
     this.robot.on('accelerometer', this.controller.sendAccelerometer)
   }
